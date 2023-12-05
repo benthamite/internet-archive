@@ -50,6 +50,16 @@ If you use the [elpaca](https://github.com/progfolio/elpaca) package manager, yo
 
 3. `M-x internet-archive-download RET`.
 
+### org-protocol
+
+If you have `org-protocol` [installed](https://www.orgroam.com/manual.html#Installation-_00281_0029) and configured on your system, you can also trigger the function directly from your browser, by creating a bookmark with the following JavaScript code:
+
+``` javascript
+javascript:location.href='org-protocol://internet-archive?url=%27 + encodeURIComponent(location.href);
+```
+
+Then simply click on this bookmark after after step (1) in the section above.
+
 ## Troubleshooting
 
 The package has not been extensively tested. If you encounter any problems, feel free to open an issue.

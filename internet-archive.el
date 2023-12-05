@@ -94,10 +94,11 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
 
 ;;;; Functions
 
-(defun internet-archive-download (url)
+(defun internet-archive-download (&optional url)
   "Download Internet Archive PDF in URL."
-  (interactive (list (read-string "URL: " (current-kill 0))))
-  (if-let ((id (replace-regexp-in-string internet-archive-id-regexp "\\2" url)))
+  (interactive)
+  (if-let ((url (or url (read-string "URL: " (current-kill 0))))
+	   (id (replace-regexp-in-string internet-archive-id-regexp "\\2" url)))
       (let ((url (concat internet-archive-prefix id internet-archive-suffix)))
 	(internet-archive--download-async url)
 	(internet-archive--watch-directory))
@@ -158,6 +159,16 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
     (internet-archive-calibre-export-file id)
     (internet-archive-calibre-remove-file id)
     (message "PDF file downloaded to %s."internet-archive-downloads-directory)))
+
+(defun internet-archive-protocol (alist)
+  "Process the `org-protocol' ALIST."
+  (message "Processing")
+  (internet-archive-download (plist-get alist :url)))
+
+(push '("internet-archive"
+	:protocol "internet-archive"
+	:function internet-archive-protocol)
+      org-protocol-protocol-alist)
 
 (provide 'internet-archive)
 ;;; internet-archive.el ends here
