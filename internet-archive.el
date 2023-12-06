@@ -61,13 +61,13 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
   :type 'directory
   :group 'internet-archive)
 
-(defcustom internet-archive-wget
+(defcustom internet-archive-wget-file
   (executable-find "wget")
   "Path to the `wget' executable."
   :type 'file
   :group 'internet-archive)
 
-(defcustom internet-archive-calibredb
+(defcustom internet-archive-calibredb-file
   (executable-find "calibredb")
   "Path to the `calibredb' executable."
   :type 'file
@@ -122,14 +122,14 @@ it is in the foreground."
 
 (defun internet-archive-download-acsm (url)
   "Download ACSM file from Internet Archive URL asynchronously."
-  (unless (executable-find internet-archive-wget)
+  (unless (executable-find internet-archive-wget-file)
     (user-error "Please install `wget' (https://www.gnu.org/software/wget/)"))
   (save-window-excursion
     (let ((shell-command-buffer-name-async "*internet-archive-download*"))
       (async-shell-command
        (format (concat "'%s' --load-cookies='%s' '%s' -O '%4$s'; open '%4$s'"
 		       (when internet-archive-ade-open-in-background " --background"))
-	       internet-archive-wget internet-archive-cookies-file url internet-archive-acsm-file)))))
+	       internet-archive-wget-file internet-archive-cookies-file url internet-archive-acsm-file)))))
 
 (defun internet-archive--watch-directory ()
   "Watch Adobe Digital Editions directory for new files."
@@ -163,24 +163,24 @@ it is in the foreground."
 (defun internet-archive-calibre-add-file (pdf)
   "Add PDF to Calibre and return its ID."
   (let ((output (shell-command-to-string (format "'%s' add '%s'"
-						 internet-archive-calibredb pdf))))
+						 internet-archive-calibredb-file pdf))))
     (string-match "Added book ids: \\([[:digit:]]+\\)" output)
     (match-string 1 output)))
 
 (defun internet-archive-calibre-export-file (id)
   "Export Calibre file with ID to `internet-archive-downloads-directory'."
   (shell-command (format "'%s' export --dont-save-cover --dont-write-opf --single-dir --to-dir %s %s"
-			 internet-archive-calibredb internet-archive-downloads-directory id)))
+			 internet-archive-calibredb-file internet-archive-downloads-directory id)))
 
 (defun internet-archive-calibre-remove-file (id)
   "Remove from Calibre file with ID."
-  (shell-command (format "'%s' remove %s" internet-archive-calibredb id))
+  (shell-command (format "'%s' remove %s" internet-archive-calibredb-file id))
   (kill-buffer "*Shell Command Output*"))
 
 (defun internet-archive-remove-drm (pdf)
   "Remove DRM from Adobe Digital Editions PDF."
-  (unless (executable-find internet-archive-calibredb)
-    (user-error "Please install `calibredb' (https://calibre-ebook.com/) and set`internet-archive-calibredb'"))
+  (unless (executable-find internet-archive-calibredb-file)
+    (user-error "Please install `calibredb' (https://calibre-ebook.com/) and set`internet-archive-calibredb-file'"))
   (let* ((id (internet-archive-calibre-add-file pdf)))
     (internet-archive-calibre-export-file id)
     (internet-archive-calibre-remove-file id)
