@@ -63,7 +63,7 @@ If you have `org-protocol` [installed](https://www.orgroam.com/manual.html#Insta
 javascript:location.href='org-protocol://internet-archive?url=%27 + encodeURIComponent(location.href);
 ```
 
-Then simply click on this bookmark after after step (1) above.
+Then simply click on this bookmark after step (1) above.
 
 ## Troubleshooting
 
