@@ -73,6 +73,11 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
   :type 'file
   :group 'internet-archive)
 
+(defcustom internet-archive-ade-kill nil
+  "Whether to kill Adobe Digital Editions immediately after the PDF downlaods.
+Note that this will kill all instances of the application."
+  :type 'boolean
+  :group 'internet-archive)
 (defvar internet-archive-directory-watcher nil
   "Descriptor for the directory watch process.")
 
@@ -135,7 +140,17 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
 	(file (nth 2 event)))
     (when (eq event-type 'created)
       (internet-archive--unwatch-directory)
+      (internet-archive-ade-kill)
       (internet-archive-remove-drm file))))
+
+(defun internet-archive-ade-kill ()
+  "Kill Adobe Digital Editions."
+  (when internet-archive-ade-kill
+    (pcase system-type
+      ((or 'darwin 'gnu/linux)
+       (shell-command "pkill 'Adobe Digital Editions'"))
+      ('windows-nt
+       (shell-command "taskkill /IM \"DigitalEditions.exe\"")))))
 
 (defun internet-archive-calibre-add-file (pdf)
   "Add PDF to Calibre and return its ID."
