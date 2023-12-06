@@ -47,6 +47,8 @@ If you use [straight](https://github.com/radian-software/straight.el), just repl
 - If you want Adobe Digital Editions to be killed once it is done downloading the PDF from the Internet Archive, set `internet-archive-ade-kill` to t.  If you want Adobe Digital Editions to open in the background, set `internet-archive-ade-open-in-background` to t. Note that it seems like ADE will start downloading the file only when
 it is in the foreground, so this option may be less useful than it appears.
 
+- For the full list of user options, `M-x customize-group RET internet-archive`.
+
 ## Usage
 
 1. From the page of the book you would like to download, click ‘Borrow for 1 hour’.
