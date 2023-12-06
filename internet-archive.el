@@ -33,7 +33,7 @@
 
 (defgroup internet-archive ()
   "Download books from the Internet Archive."
-  :group 'emacs)
+  :group 'files)
 
 (defcustom internet-archive-cookies-file
   (expand-file-name "~/.config/cookies.txt")
