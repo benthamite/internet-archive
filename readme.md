@@ -38,7 +38,7 @@ If you use [straight](https://github.com/radian-software/straight.el), just repl
 
 ## Configuration
 
-- Since `wget` needs to authenticate to be able to download files which you have borrowed from the Internet Archive, you must first export your IA cookies file and set `internet-archive-cookies-file` to point to this file. You can download the cookies by installing the [Get cookies.txt LOCALLY](https://github.com/kairi003/Get-cookies.txt-LOCALLY) browser extension. Then go to https://archive.org/, click on the extension, then click on ‘export’.
+- Since `wget` needs to authenticate to be able to download files which you have borrowed from the Internet Archive, you must first export your IA cookies file. You can export the cookies by installing the [Get cookies.txt LOCALLY](https://github.com/kairi003/Get-cookies.txt-LOCALLY) browser extension. Then go to https://archive.org/, click on the extension, click on ‘export’, and save it to `~/.config/cookies.txt`. If you would like to save it to different location, you need to update `internet-archive-cookies-file`.
 
 - Depending on where in your file system the relevant Calibre and Adobe Digital Editions are found, you may need to set the values of `internet-archive-calibre-directory` and `internet-archive-ade-directory` accordingly.
 
