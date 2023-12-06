@@ -49,7 +49,7 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
   :type 'directory
   :group 'internet-archive)
 
-(defcustom internet-archive-adobe-digital-editions-directory
+(defcustom internet-archive-ade-directory
   (expand-file-name "~/Documents/Digital Editions/")
   "Path to the Adobe Digital Editions directory."
   :type 'directory
@@ -121,7 +121,7 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
 (defun internet-archive--watch-directory ()
   "Watch Adobe Digital Editions directory for new files."
   (setq internet-archive-directory-watcher
-	(file-notify-add-watch internet-archive-adobe-digital-editions-directory
+	(file-notify-add-watch internet-archive-ade-directory
 			       '(change)
 			       #'internet-archive--directory-watch-callback)))
 

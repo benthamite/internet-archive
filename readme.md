@@ -38,11 +38,13 @@ If you use [straight](https://github.com/radian-software/straight.el), just repl
 
 ## Configuration
 
-1. Since `wget` needs to authenticate to be able to download files which you have borrowed from the Internet Archive, you must first export your IA cookies file and set `internet-archive-cookies-file` to point to this file. You can download the cookies by installing the [Get cookies.txt LOCALLY](https://github.com/kairi003/Get-cookies.txt-LOCALLY) browser extension. Then go to https://archive.org/, click on the extension, then click on ‘export’.
+- Since `wget` needs to authenticate to be able to download files which you have borrowed from the Internet Archive, you must first export your IA cookies file and set `internet-archive-cookies-file` to point to this file. You can download the cookies by installing the [Get cookies.txt LOCALLY](https://github.com/kairi003/Get-cookies.txt-LOCALLY) browser extension. Then go to https://archive.org/, click on the extension, then click on ‘export’.
 
-2. Depending on where in your file system the relevant Calibre and Adobe Digital Editions are found, you may need to set the values of `internet-archive-calibre-directory` and `internet-archive-adobe-digital-editions-directory` accordingly.
+- Depending on where in your file system the relevant Calibre and Adobe Digital Editions are found, you may need to set the values of `internet-archive-calibre-directory` and `internet-archive-ade-directory` accordingly.
 
-3. If `wget` or `calibredb` are not in your PATH, you will also have to set the values of `internet-archive-wget` or `internet-archive-calibredb`.
+- If `wget` or `calibredb` are not in your PATH, you will also have to set the values of `internet-archive-wget` or `internet-archive-calibredb`.
+
+- If you want Adobe Digital Editions to be killed once it is done downloading the PDF from the Internet Archive, set `internet-archive-kill-adobe-digital-editions` to a non-nil value.
 
 ## Usage
 
