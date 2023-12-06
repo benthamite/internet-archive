@@ -78,6 +78,14 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
 Note that this will kill all instances of the application."
   :type 'boolean
   :group 'internet-archive)
+
+(defcustom internet-archive-ade-open-in-background nil
+  "Whether to open Adobe Digital Editions in the background.
+Note that apparently the application will start downloading the file only when
+it is in the foreground."
+  :type 'boolean
+  :group 'internet-archive)
+
 (defvar internet-archive-directory-watcher nil
   "Descriptor for the directory watch process.")
 
@@ -119,9 +127,9 @@ Note that this will kill all instances of the application."
   (save-window-excursion
     (let ((shell-command-buffer-name-async "*internet-archive-download*"))
       (async-shell-command
-       (format
-	"'%s' --load-cookies='%s' '%s' -O '%4$s'; open --background '%4$s'"
-	internet-archive-wget internet-archive-cookies-file url internet-archive-acsm-file)))))
+       (format (concat "'%s' --load-cookies='%s' '%s' -O '%4$s'; open '%4$s'"
+		       (when internet-archive-ade-open-in-background " --background"))
+	       internet-archive-wget internet-archive-cookies-file url internet-archive-acsm-file)))))
 
 (defun internet-archive--watch-directory ()
   "Watch Adobe Digital Editions directory for new files."
