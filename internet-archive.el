@@ -80,6 +80,9 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
   (file-name-concat temporary-file-directory "URLLink.acsm")
   "Path to the ACSM file downloaded from Internet Archive.")
 
+(defvar internet-archive-protocol-hook nil
+  "Hook run immediately after `internet-archive-protocol' is called.")
+
 (defconst internet-archive-prefix
   "https://archive.org/services/loans/loan/?action=media_url&identifier="
   "Prefix for Internet Archive URLs.")
@@ -162,7 +165,7 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
 
 (defun internet-archive-protocol (alist)
   "Process the `org-protocol' ALIST."
-  (message "Processing")
+  (run-hooks 'internet-archive-protocol-hook)
   (internet-archive-download (plist-get alist :url)))
 
 (push '("internet-archive"
