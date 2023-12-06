@@ -184,17 +184,18 @@ it is in the foreground."
   (let* ((id (internet-archive-calibre-add-file pdf)))
     (internet-archive-calibre-export-file id)
     (internet-archive-calibre-remove-file id)
-    (message "PDF file downloaded to %s."internet-archive-downloads-directory)))
+    (message "PDF file downloaded to %s." internet-archive-downloads-directory)))
 
 (defun internet-archive-protocol (alist)
   "Process the `org-protocol' ALIST."
   (run-hooks 'internet-archive-protocol-hook)
   (internet-archive-download (plist-get alist :url)))
 
-(push '("internet-archive"
-	:protocol "internet-archive"
-	:function internet-archive-protocol)
-      org-protocol-protocol-alist)
+(when (boundp 'org-protocol-protocol-alist)
+  (push '("internet-archive"
+	  :protocol "internet-archive"
+	  :function internet-archive-protocol)
+	org-protocol-protocol-alist))
 
 (provide 'internet-archive)
 ;;; internet-archive.el ends here
