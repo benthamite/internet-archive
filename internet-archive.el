@@ -103,11 +103,11 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
   (if-let ((url (or url (read-string "URL: " (current-kill 0))))
 	   (id (replace-regexp-in-string internet-archive-id-regexp "\\2" url)))
       (let ((url (concat internet-archive-prefix id internet-archive-suffix)))
-	(internet-archive--download-async url)
+	(internet-archive-download-acsm url)
 	(internet-archive--watch-directory))
     (user-error "No ID found in URL")))
 
-(defun internet-archive--download-async (url)
+(defun internet-archive-download-acsm (url)
   "Download ACSM file from Internet Archive URL asynchronously."
   (unless (executable-find internet-archive-wget)
     (user-error "Please install `wget' (https://www.gnu.org/software/wget/)"))
