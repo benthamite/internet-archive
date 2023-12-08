@@ -31,6 +31,10 @@
 
 ;;;; Variables
 
+;;;;; User options
+
+;;;;; Paths
+
 (defgroup internet-archive ()
   "Download books from the Internet Archive."
   :group 'files)
@@ -75,6 +79,8 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
 
 (defcustom internet-archive-ade-kill nil
   "Whether to kill Adobe Digital Editions immediately after the PDF downlaods.
+;;;;; Behavior
+
 Note that this will kill all instances of the application."
   :type 'boolean
   :group 'internet-archive)
@@ -85,6 +91,8 @@ Note that apparently the application will start downloading the file only when
 it is in the foreground."
   :type 'boolean
   :group 'internet-archive)
+
+;;;;; Internal variables
 
 (defvar internet-archive-directory-watcher nil
   "Descriptor for the directory watch process.")
@@ -131,6 +139,8 @@ it is in the foreground."
 		       (when internet-archive-ade-open-in-background " --background"))
 	       internet-archive-wget-file internet-archive-cookies-file url internet-archive-acsm-file)))))
 
+;;;;; Directory watching
+
 (defun internet-archive--watch-directory ()
   "Watch Adobe Digital Editions directory for new files."
   (setq internet-archive-directory-watcher
@@ -160,6 +170,8 @@ it is in the foreground."
       ('windows-nt
        (shell-command "taskkill /IM \"DigitalEditions.exe\"")))))
 
+;;;;; Calibre
+
 (defun internet-archive-calibre-add-file (pdf)
   "Add PDF to Calibre and return its ID."
   (let ((output (shell-command-to-string (format "'%s' add '%s'"
@@ -185,6 +197,8 @@ it is in the foreground."
     (internet-archive-calibre-export-file id)
     (internet-archive-calibre-remove-file id)
     (message "PDF file downloaded to %s." internet-archive-downloads-directory)))
+
+;;;;; org-protocol
 
 (defun internet-archive-protocol (alist)
   "Process the `org-protocol' ALIST."
