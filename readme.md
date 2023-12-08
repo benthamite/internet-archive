@@ -51,21 +51,22 @@ it is in the foreground, so this option may be less useful than it appears.
 
 ## Usage
 
+### From Emacs
 1. From the page of the book you would like to download, click ‘Borrow for 1 hour’.
 
 2. Copy the URL.
 
 3. `M-x internet-archive-download RET`.
 
-### org-protocol
+### From the browser 
 
-If you have `org-protocol` [installed](https://www.orgroam.com/manual.html#Installation-_00281_0029) and configured on your system, you can also trigger the function directly from your browser, by creating a bookmark with the following JavaScript code:
+If you have `org-protocol` [installed](https://www.orgroam.com/manual.html#Installation-_00281_0029) and configured on your system, you can also trigger the function directly from your web browser, by creating a bookmark with the following JavaScript code:
 
 ``` javascript
 javascript:location.href='org-protocol://internet-archive?url=%27 + encodeURIComponent(location.href);
 ```
 
-Then simply click on this bookmark after step (1) above.
+Then simply click on this bookmark after step (1) in the previous subsection.
 
 ## Troubleshooting
 
