@@ -77,10 +77,10 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
   :type 'file
   :group 'internet-archive)
 
-(defcustom internet-archive-ade-kill nil
-  "Whether to kill Adobe Digital Editions immediately after the PDF downlaods.
 ;;;;; Behavior
 
+(defcustom internet-archive-ade-close-when-done nil
+  "Whether to close Adobe Digital Editions immediately after the PDF downlaods.
 Note that this will kill all instances of the application."
   :type 'boolean
   :group 'internet-archive)
@@ -159,11 +159,11 @@ it is in the foreground."
     (when (eq event-type 'created)
       (internet-archive--unwatch-directory)
       (internet-archive-remove-drm file)
-      (internet-archive-ade-kill))))
+      (internet-archive-ade-close-when-done))))
 
-(defun internet-archive-ade-kill ()
-  "Kill Adobe Digital Editions."
-  (when internet-archive-ade-kill
+(defun internet-archive-ade-close-when-done ()
+  "Close Adobe Digital Editions immediately after the PDF downlaods."
+  (when internet-archive-ade-close-when-done
     (pcase system-type
       ((or 'darwin 'gnu/linux)
        (shell-command "pkill 'Adobe Digital Editions'"))
