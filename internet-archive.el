@@ -148,8 +148,8 @@ it is in the foreground."
 	(file (nth 2 event)))
     (when (eq event-type 'created)
       (internet-archive--unwatch-directory)
-      (internet-archive-ade-kill)
-      (internet-archive-remove-drm file))))
+      (internet-archive-remove-drm file)
+      (internet-archive-ade-kill))))
 
 (defun internet-archive-ade-kill ()
   "Kill Adobe Digital Editions."
