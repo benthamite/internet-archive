@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This simple Emacs package lets you download any PDF from the [Internet Archive](https://archive.org/), as long as it can be borrowed for one hour (or longer).
+This simple Emacs package lets you download any PDF file from the [Internet Archive](https://archive.org/) effortlessly, as long as it can be borrowed for at least one hour.
 
 ## Requirements
 
