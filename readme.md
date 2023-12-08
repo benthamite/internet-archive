@@ -52,11 +52,12 @@ it is in the foreground, so this option may be less useful than it appears.
 ## Usage
 
 ### From Emacs
-1. From the page of the book you would like to download, click ‘Borrow for 1 hour’.
+
+1. Go to the Internet Archive, find a book you would like to download, and click ‘Borrow for 1 hour’.
 
 2. Copy the URL.
 
-3. `M-x internet-archive-download RET`.
+3. Switch to Emacs, then `M-x internet-archive-download RET`.
 
 ### From the browser 
 
@@ -66,7 +67,7 @@ If you have `org-protocol` [installed](https://www.orgroam.com/manual.html#Insta
 javascript:location.href='org-protocol://internet-archive?url=%27 + encodeURIComponent(location.href);
 ```
 
-Then simply click on this bookmark after step (1) in the previous subsection.
+Then simply click on this bookmark after clicking ‘Borrow for 1 hour’.
 
 ## Troubleshooting
 
