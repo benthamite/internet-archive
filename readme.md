@@ -20,7 +20,7 @@ Clone this repository and add this to your `init.el` file:
 (add-to-list 'load-path "path/to/internet-archive")
 ```
 
-where `"path/to/internet-archive"` is the path to the local repository you just cloned.
+Where `"path/to/internet-archive"` is the path to the local repository you just cloned.
 
 ### Elpaca/Straight
 
