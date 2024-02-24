@@ -59,6 +59,17 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
   :type 'directory
   :group 'internet-archive)
 
+;;;;;; Files
+
+;;;;;;; Executables
+
+(defcustom internet-archive-cli-file
+  (executable-find "ia")
+  "Path to the `ia' executable.
+See <https://archive.org/developers/internetarchive/cli.html>."
+  :type 'file
+  :group 'internet-archive)
+
 (defcustom internet-archive-wget-file
   (executable-find "wget")
   "Path to the `wget' executable.
@@ -72,6 +83,7 @@ See <https://www.gnu.org/software/wget/>."
 See <https://manual.calibre-ebook.com/generated/en/calibredb.html>."
   :type 'file
   :group 'internet-archive)
+
 ;;;;;;; Other files
 
 (defcustom internet-archive-cookies-file
@@ -119,17 +131,69 @@ it is in the foreground."
   "\\(http.*?details/\\)\\([_[:alnum:]]*\\)\\(.*\\)"
   "Regular expression for capturing the book ID in an Internet Archive URL.")
 
+(defconst internet-archive-borrow-request
+  "https://archive.org/services/loans/loan/index.php?identifier=%s&action=borrow_book"
+  "URL endpoint for borrowing a work from the Internet Archive.")
+
+(defconst internet-archive-is-book-p
+  "mediatype:texts"
+  "Query element that restricts results to books.")
+
+(defconst internet-archive-is-borrowable-p
+  "collection:inlibrary OR collection:opensource"
+  "Query element that restricts results to items that can be borrowed.")
+
+(defvar internet-archive-search-metadata
+  '("title" "creator")
+  "Metadata fields to show in search results.
+For a list of valid fields, see <https://archive.org/developers/metadata-schema/>.")
+
 ;;;; Functions
 
-(defun internet-archive-download (&optional url)
-  "Download Internet Archive PDF in URL."
+(defun internet-archive ()
+  "Download a PDF from the Internet Archive."
   (interactive)
-  (if-let ((url (or url (read-string "URL: " (current-kill 0))))
-	   (id (replace-regexp-in-string internet-archive-id-regexp "\\2" url)))
-      (let ((url (concat internet-archive-prefix id internet-archive-suffix)))
-	(internet-archive-download-acsm url)
-	(internet-archive--watch-directory))
+  (let* ((url-or-title (read-string "URL or title: " ))
+	 (id (if (url-p url-or-title)
+		 (internet-archive-get-id-from-url url-or-title)
+	       (internet-archive-get-id-from-search url-or-title))))
+    (internet-archive-download id)))
+
+(defun internet-archive-get-id-from-url (&optional url)
+  "Return the ID of the work in URL."
+  (if-let ((url (or url (read-string "URL: "))))
+      (replace-regexp-in-string internet-archive-id-regexp "\\2" url)
     (user-error "No ID found in URL")))
+
+(defun internet-archive-get-id-from-search (&optional title author)
+  "Return IDs from TITLE and AUTHOR."
+  (let* ((title (or title (read-string "Title: ")))
+	 (author (or author (read-string "Author: "))))
+    (if (and (string-empty-p title) (string-empty-p author))
+	(user-error "Both \"Title\" and \"Author\" can't be empty")
+      (let ((query (internet-archive-format-query title author)))
+	(if-let ((results (internet-archive-search query internet-archive-search-metadata)))
+	    (alist-get (completing-read "Select book to download: " results) results nil nil #'string=)
+	  (user-error "No results"))))))
+
+(defun internet-archive-download (id)
+  "Download work with ID from the Internet Archive."
+  (let ((url (concat internet-archive-prefix id internet-archive-suffix)))
+    (message "Borrowing book...")
+    (internet-archive-borrow id)
+    (internet-archive-download-acsm url)
+    (internet-archive--watch-directory)))
+
+(defun internet-archive-borrow (id)
+  "Borrow work with ID from the Internet Archive."
+  (let* ((url (format internet-archive-borrow-request id))
+	 (output (shell-command-to-string (format "curl --cookie \"%s\" \"%s\"" internet-archive-cookies-file url))))
+    (string-match "{.*}" output)
+    (let* ((json (internet-archive-read-json (match-string 0 output)))
+	   (status (caar json)))
+      (pcase status
+	('success (message "Book borrowed successfully."))
+	('error (user-error (alist-get status json)))))))
 
 (defun internet-archive-download-acsm (url)
   "Download ACSM file from Internet Archive URL asynchronously."
@@ -137,10 +201,59 @@ it is in the foreground."
     (user-error "Please install `wget' (https://www.gnu.org/software/wget/)"))
   (save-window-excursion
     (let ((shell-command-buffer-name-async "*internet-archive-download*"))
-      (async-shell-command
+      (shell-command
        (format (concat "'%s' --load-cookies='%s' '%s' -O '%4$s'; open '%4$s'"
 		       (when internet-archive-ade-open-in-background " --background"))
 	       internet-archive-wget-file internet-archive-cookies-file url internet-archive-acsm-file)))))
+
+;;;;; Querying
+
+(defun internet-archive-search (query fields)
+  "Perform a QUERY and return an a list of identifiers and formatted FIELDS."
+  (let* ((data (shell-command-to-string
+		(format "%s search %s %s"
+			internet-archive-cli-file query
+			(internet-archive-format-fields fields))))
+	 (lines (split-string data "\n" t))
+	 alist)
+    (dolist (line lines alist)
+      (let ((json (internet-archive-read-json line)))
+	(when-let ((id (alist-get 'identifier json)))
+	  (let ((metadata (internet-archive-get-formatted-metadata fields json)))
+	    (push (cons metadata id) alist)))))))
+
+(defun internet-archive-get-formatted-metadata (fields json)
+  "Return the formatted metadata for FIELDS in JSON response."
+  (mapconcat (lambda (field)
+	       (let* ((value (alist-get (intern field) json)))
+		 (format "%-50.50s"
+			 (if (listp value) (mapconcat 'identity value ", ") value))))
+	     fields "  "))
+
+(defun internet-archive-read-json (string)
+  "Read STRING as a JSON object."
+  (with-temp-buffer
+    (insert string)
+    (goto-char (point-min))
+    (let* ((json-object-type 'alist)
+	   (json-array-type 'list))
+      (json-read))))
+
+(defun internet-archive-format-query (title author)
+  "Make query from TITLE and AUTHOR."
+  (let ((query-elements (list internet-archive-is-book-p internet-archive-is-borrowable-p)))
+    (when-let (title (unless (string-empty-p title) (format "title:%s" title)))
+      (push title query-elements))
+    (when-let (author (unless (string-empty-p author) (format "creator:%s" author)))
+      (push author query-elements))
+    (format "'%s'"  (string-join query-elements " AND "))))
+
+(defun internet-archive-format-fields (fields)
+  "Format FIELDS as a string."
+  (string-join (mapcar (lambda (field)
+			 (format " --field=%s" field))
+		       fields)
+	       " "))
 
 ;;;;; Directory watching
 
@@ -215,4 +328,5 @@ it is in the foreground."
 	org-protocol-protocol-alist))
 
 (provide 'internet-archive)
+
 ;;; internet-archive.el ends here
