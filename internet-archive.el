@@ -33,17 +33,11 @@
 
 ;;;;; User options
 
-;;;;; Paths
-
 (defgroup internet-archive ()
   "Download books from the Internet Archive."
   :group 'files)
 
-(defcustom internet-archive-cookies-file
-  (expand-file-name "~/.config/cookies.txt")
-  "Path to the Chrome cookies file."
-  :type 'file
-  :group 'internet-archive)
+;;;;;; Directories
 
 (defcustom internet-archive-calibre-directory
   (expand-file-name "~/Calibre Library/")
@@ -74,6 +68,11 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
 (defcustom internet-archive-calibredb-file
   (executable-find "calibredb")
   "Path to the `calibredb' executable."
+;;;;;;; Other files
+
+(defcustom internet-archive-cookies-file
+  (expand-file-name "~/.config/cookies.txt")
+  "Path to the Chrome cookies file."
   :type 'file
   :group 'internet-archive)
 
