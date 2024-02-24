@@ -61,13 +61,17 @@ files (https://manual.calibre-ebook.com/faq.html#id31)."
 
 (defcustom internet-archive-wget-file
   (executable-find "wget")
-  "Path to the `wget' executable."
+  "Path to the `wget' executable.
+See <https://www.gnu.org/software/wget/>."
   :type 'file
   :group 'internet-archive)
 
 (defcustom internet-archive-calibredb-file
   (executable-find "calibredb")
-  "Path to the `calibredb' executable."
+  "Path to the `calibredb' executable.
+See <https://manual.calibre-ebook.com/generated/en/calibredb.html>."
+  :type 'file
+  :group 'internet-archive)
 ;;;;;;; Other files
 
 (defcustom internet-archive-cookies-file
