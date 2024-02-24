@@ -65,7 +65,7 @@ it is in the foreground, so this option may be less useful than it appears.
 
 ### From Emacs
 
-`M-x internet-archive`, followed by a URL or a search string, depending on whether you already know the URL of the book you would like to download or need to search for it.
+`M-x internet-archive`, followed by a URL or a title, depending on whether you already know the URL of the book you would like to download or need to search for it. If you choose to search for a book, you will also be prompted to enter an author. The `title` and `author` fields are each, but not jointly, optional.
 
 ### From the browser 
 
