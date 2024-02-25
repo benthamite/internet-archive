@@ -11,7 +11,7 @@ This simple Emacs package lets you download any PDF file from the [Internet Arch
 - [Adobe Digital Editions](https://www.adobe.com/solutions/ebook/digital-editions.html).
 - [calibre](https://calibre-ebook.com/) with [DRM Removal plugin](https://www.epubor.com/calibre-drm-removal-plugins.html).
 
-If you are on macOS, you can install all of the above requirements by running
+If you are on macOS and use Homebrew, you can install all of the above requirements by running
 
 ```shell
 brew install internetarchive wget adobe-digital-editions calibre
