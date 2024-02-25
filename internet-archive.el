@@ -107,6 +107,27 @@ it is in the foreground."
   :type 'boolean
   :group 'internet-archive)
 
+;;;;;; Fields
+
+(defcustom internet-archive-query-fields
+  '("title" "creator")
+  "Fields to to use in the search query.
+The user will be prompted for values for these fields.
+
+For a list of admissible fields, see
+<https://archive.org/developers/metadata-schema/>."
+  :type '(repeat string)
+  :group 'internet-archive)
+
+(defcustom internet-archive-metadata-fields
+  '("title" "publicationdate" "language" "publisher" )
+  "Fields to show in search results.
+The user will be prompted to select a book from the search results.
+
+The admissible fields are the same as in `internet-archive-metadata-fields'."
+  :type '(repeat string)
+  :group 'internet-archive)
+
 ;;;;; Internal variables
 
 (defvar internet-archive-directory-watcher nil
@@ -165,16 +186,24 @@ For a list of valid fields, see <https://archive.org/developers/metadata-schema/
       (replace-regexp-in-string internet-archive-id-regexp "\\2" url)
     (user-error "No ID found in URL")))
 
-(defun internet-archive-get-id-from-search (&optional title author)
-  "Return IDs from TITLE and AUTHOR."
-  (let* ((title (or title (read-string "Title: ")))
-	 (author (or author (read-string "Author: "))))
-    (if (and (string-empty-p title) (string-empty-p author))
-	(user-error "Both \"Title\" and \"Author\" can't be empty")
-      (let ((query (internet-archive-format-query title author)))
-	(if-let ((results (internet-archive-search query internet-archive-search-metadata)))
-	    (alist-get (completing-read "Select book to download: " results) results nil nil #'string=)
-	  (user-error "No results"))))))
+(defun internet-archive-get-id-from-search (title)
+  "Return ID from a search query.
+The user will be prompted for values for the fields in
+`internet-archive-query-fields', except for the field TITLE, which takes `title'
+as its value."
+  (let (field-values)
+    (dolist (field internet-archive-query-fields)
+      (let ((value (if (string= field "title")
+		       title
+		     (read-string (format "%s: " field)))))
+	(unless (string-empty-p value)
+	  (push (format "%s:%s" field value) field-values))))
+    (unless field-values
+      (user-error "At least one field must be non-empty"))
+    (let ((query (internet-archive-format-query-fields field-values)))
+      (if-let ((results (internet-archive-search query internet-archive-metadata-fields)))
+	  (alist-get (completing-read "Select book to download: " results) results nil nil #'string=)
+	(user-error "No results")))))
 
 (defun internet-archive-download (id)
   "Download work with ID from the Internet Archive."
@@ -239,16 +268,14 @@ For a list of valid fields, see <https://archive.org/developers/metadata-schema/
 	   (json-array-type 'list))
       (json-read))))
 
-(defun internet-archive-format-query (title author)
-  "Make query from TITLE and AUTHOR."
-  (let ((query-elements (list internet-archive-is-book-p internet-archive-is-borrowable-p)))
-    (when-let (title (unless (string-empty-p title) (format "title:%s" title)))
-      (push title query-elements))
-    (when-let (author (unless (string-empty-p author) (format "creator:%s" author)))
-      (push author query-elements))
-    (format "'%s'"  (string-join query-elements " AND "))))
+(defun internet-archive-format-query-fields (field-values)
+  "Make query from list of FIELD-VALUES."
+  (let* ((default-field-values (list internet-archive-is-book-p
+				     internet-archive-is-borrowable-p))
+	 (all-field-values (append field-values default-field-values)))
+    (format "'%s'"  (string-join all-field-values " AND "))))
 
-(defun internet-archive-format-fields (fields)
+(defun internet-archive-format-metadata-fields (fields)
   "Format FIELDS as a string."
   (string-join (mapcar (lambda (field)
 			 (format " --field=%s" field))
