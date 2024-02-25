@@ -54,7 +54,7 @@ When running for the first time:
 
 ### From Emacs
 
-`M-x internet-archive`, followed by a URL or a title, depending on whether you already know the URL of the book you would like to download or need to search for it. If you choose to search for a book, you will also be prompted to enter an author. The `title` and `author` fields are each, but not jointly, optional.
+`M-x internet-archive`, followed by a URL or a title, depending on whether you already know the URL of the book you would like to download or need to search for it. If you choose to search for a book, you will also be prompted to enter an author (labelled `creator`). (These fields are customizable; see below.)
 
 ### From the browser 
 
@@ -67,6 +67,11 @@ javascript:location.href='org-protocol://internet-archive?url=%27 + encodeURICom
 Then simply click on this bookmark after clicking ‘Borrow for 1 hour’.
 
 ## Customization
+
+- For running search queries, the fields `title` and `creator` are used by default. If you would like to use different fields, you can set `internet-archive-query-fields`. The full list of fields is [here](https://archive.org/developers/metadata-schema).
+
+- When returning results, the fields `title` and `creator` are also used by default. If you would like to use different fields, you can set `internet-archive-metadata-fields`.
+
 - Depending on where in your file system the relevant Calibre and Adobe Digital Editions are found, you may need to set the values of `internet-archive-calibre-directory` and `internet-archive-ade-directory` accordingly.
 
 - Emacs should be able to find the `ia`, `wget` and `calibredb` executables. But if it doesn’t, you can specify their location manually by setting the value of `internet-archive-cli-file`, `internet-archive-wget-file` and `internet-archive-calibredb-file`, respectively.
