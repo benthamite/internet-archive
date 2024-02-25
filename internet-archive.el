@@ -282,11 +282,18 @@ as its value."
 
 (defun internet-archive-get-formatted-metadata (fields json)
   "Return the formatted metadata for FIELDS in JSON response."
-  (mapconcat (lambda (field)
-	       (let* ((value (alist-get (intern field) json)))
-		 (format "%-50.50s"
-			 (if (listp value) (mapconcat 'identity value ", ") value))))
-	     fields "  "))
+  (let* ((field-number (length fields))
+	 (max-total-width (max (frame-width) 80))
+	 (ideal-field-width 50)
+	 (max-field-width (/ max-total-width field-number))
+	 (field-width (min ideal-field-width max-field-width))
+	 (format-string (format "%%-%1$d.%1$ds" field-width)))
+    (mapconcat (lambda (field)
+		 "Get the value of FIELD, concatenate it if it is a list, and format it."
+		 (let ((value (alist-get (intern field) json)))
+		   (format format-string
+			   (if (listp value) (mapconcat 'identity value ", ") value))))
+	       fields "  ")))
 
 (defun internet-archive-read-json (string)
   "Read STRING as a JSON object."
