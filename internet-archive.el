@@ -294,7 +294,8 @@ as its value."
     (insert string)
     (goto-char (point-min))
     (let* ((json-object-type 'alist)
-	   (json-array-type 'list))
+	   (json-array-type 'list)
+	   (json-false nil))
       (json-read))))
 
 (defun internet-archive-format-query-fields (field-values)
