@@ -234,7 +234,10 @@ as its value."
     (not (alist-get 'is_login_required lending-status))))
 
 (defun internet-archive-download-simple (id)
-  "Download work with ID from the Internet Archive with simple method."
+  "Download work with ID from the Internet Archive with simple method.
+Some books on the Internet Archive can be downloaded straight away, without
+having to first borrow them. These books we can simply download using the CLI.
+We call this download method the ‘simple method’."
   (let* ((default-directory internet-archive-downloads-directory)
 	 (shell-command-buffer-name-async "*internet-archive-download*"))
     (async-shell-command (format "%s download %s %s"
@@ -242,7 +245,11 @@ as its value."
 				 internet-archive-cli-restrict-to-pdf))))
 
 (defun internet-archive-download-complex (id)
-  "Download work with ID from the Internet Archive with complex method."
+  "Download work with ID from the Internet Archive with complex method.
+Many books on the Internet Archive need to be \"borrowed\" before they can be
+read. These books can’t be simply downloaded with the CLI. Instead, we need to
+use a combination of Wget, Adobe Digital Editions, and Calibre. We call this
+download method the ‘complex method’."
   (let ((url (concat internet-archive-prefix id internet-archive-suffix)))
     (internet-archive-borrow id)
     (internet-archive-download-acsm url)
