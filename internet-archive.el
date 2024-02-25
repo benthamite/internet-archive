@@ -152,22 +152,26 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
   "\\(http.*?details/\\)\\([_[:alnum:]]*\\)\\(.*\\)"
   "Regular expression for capturing the book ID in an Internet Archive URL.")
 
+;;;;;; Requests
+
 (defconst internet-archive-borrow-request
   "https://archive.org/services/loans/loan/index.php?identifier=%s&action=borrow_book"
   "URL endpoint for borrowing a work from the Internet Archive.")
+
+(defconst internet-archive-availability-request
+  "https://archive.org/services/loans/loan/index.php?identifier=%s&action=availability"
+  "URL endpoint for getting work’s availability in the Internet Archive.")
+
+;;;;;; Fields
 
 (defconst internet-archive-is-book-p
   "mediatype:texts"
   "Query element that restricts results to books.")
 
+;; TODO: check if this is correct
 (defconst internet-archive-is-borrowable-p
-  "collection:inlibrary OR collection:opensource"
+  "(collection:inlibrary OR collection:opensource)"
   "Query element that restricts results to items that can be borrowed.")
-
-(defvar internet-archive-search-metadata
-  '("title" "creator")
-  "Metadata fields to show in search results.
-For a list of valid fields, see <https://archive.org/developers/metadata-schema/>.")
 
 ;;;; Functions
 
@@ -207,8 +211,26 @@ as its value."
 
 (defun internet-archive-download (id)
   "Download work with ID from the Internet Archive."
+  (if (internet-archive-can-be-simply-downloaded-p id)
+      (internet-archive-download-simple id)
+    (internet-archive-download-complex id)))
+
+(defun internet-archive-can-be-simply-downloaded-p (id)
+  "Return t iff work with ID can be downloaded with simple method."
+  (let* ((json (internet-archive-get-request-as-json id internet-archive-availability-request))
+	 (lending-status (alist-get 'lending_status json)))
+    (not (alist-get 'is_login_required lending-status))))
+
+(defun internet-archive-download-simple (id)
+  "Download work with ID from the Internet Archive with simple method."
+  (let* ((default-directory internet-archive-downloads-directory)
+	 (shell-command-buffer-name-async "*internet-archive-download*"))
+    (async-shell-command (format "%s download %s --glob='*.pdf'"
+				 internet-archive-cli-file id))))
+
+(defun internet-archive-download-complex (id)
+  "Download work with ID from the Internet Archive with complex method."
   (let ((url (concat internet-archive-prefix id internet-archive-suffix)))
-    (message "Borrowing book...")
     (internet-archive-borrow id)
     (internet-archive-download-acsm url)
     (internet-archive--watch-directory)))
