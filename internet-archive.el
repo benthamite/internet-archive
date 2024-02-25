@@ -258,7 +258,7 @@ as its value."
   (unless (executable-find internet-archive-wget-file)
     (user-error "Please install `wget' (https://www.gnu.org/software/wget/)"))
   (save-window-excursion
-    (let ((shell-command-buffer-name-async "*internet-archive-download*"))
+    (let ((shell-command-buffer-name-async "*internet-archive-acsm-download*"))
       (shell-command
        (format (concat "'%s' --load-cookies='%s' '%s' -O '%4$s'; open '%4$s'"
 		       (when internet-archive-ade-open-in-background " --background"))
