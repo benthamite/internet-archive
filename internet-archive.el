@@ -165,6 +165,10 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
   "(collection:inlibrary OR collection:opensource)"
   "Query element that restricts results to items that can be borrowed.")
 
+(defconst internet-archive-cli-restrict-to-pdf
+  "--glob='*.pdf'"
+  "Flag that restricts downloads the PDF files.")
+
 ;;;;;; Misc
 
 (defvar internet-archive-ade-directory-watcher nil
@@ -229,8 +233,9 @@ as its value."
   "Download work with ID from the Internet Archive with simple method."
   (let* ((default-directory internet-archive-downloads-directory)
 	 (shell-command-buffer-name-async "*internet-archive-download*"))
-    (async-shell-command (format "%s download %s --glob='*.pdf'"
-				 internet-archive-cli-file id))))
+    (async-shell-command (format "%s download %s %s"
+				 internet-archive-cli-file id
+				 internet-archive-cli-restrict-to-pdf))))
 
 (defun internet-archive-download-complex (id)
   "Download work with ID from the Internet Archive with complex method."
