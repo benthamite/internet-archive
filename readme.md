@@ -68,7 +68,7 @@ Then simply click on this bookmark after clicking ‘Borrow for 1 hour’.
 
 ## Customization
 
-- For running search queries, the fields `title` and `creator` are used by default. If you would like to use different fields, you can set `internet-archive-query-fields`. (The full list of admissible fields is [here](https://archive.org/developers/metadata-schema).) Note that the first of the fields in the variable will be used for the initial prompt upon invocation of `internet-archive`: for example, if you set `internet-archive-query-fields` to `("author" "title" "language")`, you will initially be prompted to enter a URL or an author (rather than a URL or a title), and this will be followed by a prompt to enter a title and a language.
+- For running search queries, the fields `title` and `creator` are used by default. If you would like to use different fields, you can set `internet-archive-query-fields`. (The full list of admissible fields is [here](https://archive.org/developers/metadata-schema).) Note that the first of the fields in the variable will be used for the initial prompt upon invocation of `internet-archive`. For example, if you set `internet-archive-query-fields` to `("author" "title" "language")`, you will initially be prompted to enter a URL or an author (rather than a URL or a title), and this will be followed by prompts to enter a title and a language.
 
 - When returning results, the fields `title` and `creator` are also used by default. If you would like to use different fields, you can set `internet-archive-metadata-fields`.
 
@@ -76,7 +76,7 @@ Then simply click on this bookmark after clicking ‘Borrow for 1 hour’.
 
 - Emacs should be able to find the `ia`, `wget` and `calibredb` executables. But if it doesn’t, you can specify their location manually by setting the value of `internet-archive-cli-file`, `internet-archive-wget-file` and `internet-archive-calibredb-file`, respectively.
 
-- If you want Adobe Digital Editions to be closed once it is done downloading the PDF from the Internet Archive, set `internet-archive-ade-close-when-done` to `t`.  If you want Adobe Digital Editions to open in the background, set `internet-archive-ade-open-in-background` to `t`. Note that it seems like ADE will start downloading the file only when
+- If you want Adobe Digital Editions to close once it is done downloading the PDF from the Internet Archive, set `internet-archive-ade-close-when-done` to `t`.  If you want Adobe Digital Editions to open in the background, set `internet-archive-ade-open-in-background` to `t`. Note that it seems like ADE will start downloading the file only when
 it is in the foreground, so this option may be less useful than it appears.
 
 - For the full list of user options, `M-x customize-group RET internet-archive`.
