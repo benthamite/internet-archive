@@ -130,16 +130,6 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
 
 ;;;;; Internal variables
 
-(defvar internet-archive-ade-directory-watcher nil
-  "Descriptor for the Adobe Digital Editions directory watch process.")
-
-(defvar internet-archive-acsm-file
-  (file-name-concat temporary-file-directory "URLLink.acsm")
-  "Path to the ACSM file downloaded from Internet Archive.")
-
-(defvar internet-archive-protocol-hook nil
-  "Hook run immediately after `internet-archive-protocol' is called.")
-
 ;;;;;; URL builder elements
 
 (defconst internet-archive-prefix
@@ -174,6 +164,18 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
 (defconst internet-archive-is-borrowable-p
   "(collection:inlibrary OR collection:opensource)"
   "Query element that restricts results to items that can be borrowed.")
+
+;;;;;; Misc
+
+(defvar internet-archive-ade-directory-watcher nil
+  "Descriptor for the Adobe Digital Editions directory watch process.")
+
+(defvar internet-archive-acsm-file
+  (file-name-concat temporary-file-directory "URLLink.acsm")
+  "Path to the ACSM file downloaded from Internet Archive.")
+
+(defvar internet-archive-protocol-hook nil
+  "Hook run immediately after `internet-archive-protocol' is called.")
 
 ;;;; Functions
 
