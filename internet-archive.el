@@ -273,7 +273,8 @@ as its value."
       (shell-command
        (format (concat "'%s' --load-cookies='%s' '%s' -O '%4$s'; open '%4$s'"
 		       (when internet-archive-ade-open-in-background " --background"))
-	       internet-archive-wget-file internet-archive-cookies-file url internet-archive-acsm-file)))))
+	       internet-archive-wget-file internet-archive-cookies-file url
+	       internet-archive-acsm-file)))))
 
 ;;;;; Querying
 
