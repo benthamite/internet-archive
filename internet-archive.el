@@ -130,8 +130,8 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
 
 ;;;;; Internal variables
 
-(defvar internet-archive-directory-watcher nil
-  "Descriptor for the directory watch process.")
+(defvar internet-archive-ade-directory-watcher nil
+  "Descriptor for the Adobe Digital Editions directory watch process.")
 
 (defvar internet-archive-acsm-file
   (file-name-concat temporary-file-directory "URLLink.acsm")
@@ -233,7 +233,7 @@ as its value."
   (let ((url (concat internet-archive-prefix id internet-archive-suffix)))
     (internet-archive-borrow id)
     (internet-archive-download-acsm url)
-    (internet-archive--watch-directory)))
+    (internet-archive-watch-ade-directory)))
 
 (defun internet-archive-borrow (id)
   "Borrow work with ID from the Internet Archive."
@@ -264,7 +264,7 @@ as its value."
   (let* ((data (shell-command-to-string
 		(format "%s search %s %s"
 			internet-archive-cli-file query
-			(internet-archive-format-fields fields))))
+			(internet-archive-format-metadata-fields fields))))
 	 (lines (split-string data "\n" t))
 	 alist)
     (dolist (line lines alist)
