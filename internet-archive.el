@@ -156,12 +156,12 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
 
 ;;;;;; Fields
 
-(defconst internet-archive-is-book-p
+(defconst internet-archive-cli-is-book-p
   "mediatype:texts"
   "Query element that restricts results to books.")
 
 ;; TODO: check if this is correct
-(defconst internet-archive-is-borrowable-p
+(defconst internet-archive-cli-is-borrowable-p
   "(collection:inlibrary OR collection:opensource)"
   "Query element that restricts results to items that can be borrowed.")
 
@@ -309,8 +309,8 @@ as its value."
 
 (defun internet-archive-format-query-fields (field-values)
   "Make query from list of FIELD-VALUES."
-  (let* ((default-field-values (list internet-archive-is-book-p
-				     internet-archive-is-borrowable-p))
+  (let* ((default-field-values (list internet-archive-cli-is-book-p
+				     internet-archive-cli-is-borrowable-p))
 	 (all-field-values (append field-values default-field-values)))
     (format "'%s'"  (string-join all-field-values " AND "))))
 
