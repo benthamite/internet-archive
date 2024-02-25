@@ -257,28 +257,28 @@ For a list of valid fields, see <https://archive.org/developers/metadata-schema/
 
 ;;;;; Directory watching
 
-(defun internet-archive--watch-directory ()
+(defun internet-archive-watch-ade-directory ()
   "Watch Adobe Digital Editions directory for new files."
-  (setq internet-archive-directory-watcher
+  (setq internet-archive-ade-directory-watcher
 	(file-notify-add-watch internet-archive-ade-directory
 			       '(change)
-			       #'internet-archive--directory-watch-callback)))
+			       #'internet-archive-ade-directory-watch-callback)))
 
-(defun internet-archive--unwatch-directory ()
+(defun internet-archive-unwatch-ade-directory ()
   "Stop watching Adobe Digital Editions directory for new files."
-  (file-notify-rm-watch internet-archive-directory-watcher))
+  (file-notify-rm-watch internet-archive-ade-directory-watcher))
 
-(defun internet-archive--directory-watch-callback (event)
+(defun internet-archive-ade-directory-watch-callback (event)
   "Process the file-notify EVENT."
   (let ((event-type (nth 1 event))
 	(file (nth 2 event)))
     (when (eq event-type 'created)
-      (internet-archive--unwatch-directory)
+      (internet-archive-unwatch-ade-directory)
       (internet-archive-remove-drm file)
       (internet-archive-ade-close-when-done))))
 
 (defun internet-archive-ade-close-when-done ()
-  "Close Adobe Digital Editions immediately after the PDF downlaods."
+  "Close Adobe Digital Editions immediately after the PDF downloads."
   (when internet-archive-ade-close-when-done
     (pcase system-type
       ((or 'darwin 'gnu/linux)
