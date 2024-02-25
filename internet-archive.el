@@ -120,7 +120,7 @@ For a list of admissible fields, see
   :group 'internet-archive)
 
 (defcustom internet-archive-metadata-fields
-  '("title" "publicationdate" "language" "publisher" )
+  '("title" "creator")
   "Fields to show in search results.
 The user will be prompted to select a book from the search results.
 
