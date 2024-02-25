@@ -190,10 +190,11 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
 (defun internet-archive ()
   "Download a PDF from the Internet Archive."
   (interactive)
-  (let* ((url-or-title (read-string "URL or title: " ))
-	 (id (if (url-p url-or-title)
-		 (internet-archive-get-id-from-url url-or-title)
-	       (internet-archive-get-id-from-search url-or-title))))
+  (let* ((url-or-field (read-string (format "URL or %s: "
+					    (car internet-archive-query-fields))))
+	 (id (if (url-p url-or-field)
+		 (internet-archive-get-id-from-url url-or-field)
+	       (internet-archive-get-id-from-search url-or-field))))
     (internet-archive-download id)))
 
 (defun internet-archive-get-id-from-url (&optional url)
@@ -202,15 +203,15 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
       (replace-regexp-in-string internet-archive-id-regexp "\\2" url)
     (user-error "No ID found in URL")))
 
-(defun internet-archive-get-id-from-search (title)
+(defun internet-archive-get-id-from-search (first-field)
   "Return ID from a search query.
 The user will be prompted for values for the fields in
-`internet-archive-query-fields', except for the field TITLE, which takes `title'
-as its value."
+`internet-archive-query-fields', except for the field FIRST-FIELD, which takes
+its value from that argument."
   (let (field-values)
     (dolist (field internet-archive-query-fields)
-      (let ((value (if (string= field "title")
-		       title
+      (let ((value (if (string= field (car internet-archive-query-fields))
+		       first-field
 		     (read-string (format "%s: " field)))))
 	(unless (string-empty-p value)
 	  (push (format "%s:%s" field value) field-values))))
