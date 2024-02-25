@@ -92,7 +92,7 @@ See <https://manual.calibre-ebook.com/generated/en/calibredb.html>."
   :type 'file
   :group 'internet-archive)
 
-;;;;; Behavior
+;;;;;; Behavior
 
 (defcustom internet-archive-ade-close-when-done nil
   "Whether to close Adobe Digital Editions immediately after the PDF downlaods.
@@ -139,6 +139,8 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
 
 (defvar internet-archive-protocol-hook nil
   "Hook run immediately after `internet-archive-protocol' is called.")
+
+;;;;;; URL builder elements
 
 (defconst internet-archive-prefix
   "https://archive.org/services/loans/loan/?action=media_url&identifier="
