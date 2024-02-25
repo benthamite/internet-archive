@@ -154,7 +154,7 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
   "https://archive.org/services/loans/loan/index.php?identifier=%s&action=availability"
   "URL endpoint for getting work’s availability in the Internet Archive.")
 
-;;;;;; Fields
+;;;;;; ia CLI
 
 (defconst internet-archive-cli-is-book-p
   "mediatype:texts"
@@ -321,7 +321,7 @@ as its value."
 		       fields)
 	       " "))
 
-;;;;; Directory watching
+;;;;; Adobe Digital Editions
 
 (defun internet-archive-watch-ade-directory ()
   "Watch Adobe Digital Editions directory for new files."
