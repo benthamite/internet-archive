@@ -171,6 +171,10 @@ The admissible fields are the same as in `internet-archive-metadata-fields'."
 
 ;;;;;; Misc
 
+(defconst internet-archive-calibredb-flags
+  "--dont-save-cover --dont-write-opf --single-dir --to-dir"
+  "Flags for exporting the Calibre file.")
+
 (defvar internet-archive-ade-directory-watcher nil
   "Descriptor for the Adobe Digital Editions directory watch process.")
 
@@ -368,8 +372,10 @@ as its value."
 
 (defun internet-archive-calibre-export-file (id)
   "Export Calibre file with ID to `internet-archive-downloads-directory'."
-  (shell-command (format "'%s' export --dont-save-cover --dont-write-opf --single-dir --to-dir %s %s"
-			 internet-archive-calibredb-file internet-archive-downloads-directory id)))
+  (shell-command (format "'%s' export %s %s %s"
+			 internet-archive-calibredb-file
+			 internet-archive-calibredb-flags
+			 internet-archive-downloads-directory id)))
 
 (defun internet-archive-calibre-remove-file (id)
   "Remove from Calibre file with ID."
