@@ -239,14 +239,19 @@ as its value."
 
 (defun internet-archive-borrow (id)
   "Borrow work with ID from the Internet Archive."
-  (let* ((url (format internet-archive-borrow-request id))
-	 (output (shell-command-to-string (format "curl --cookie \"%s\" \"%s\"" internet-archive-cookies-file url))))
+  (let* ((json (internet-archive-get-request-as-json id internet-archive-borrow-request))
+	 (status (caar json)))
+    (pcase status
+      ('success (message "Book borrowed successfully."))
+      ('error (user-error (alist-get status json))))))
+
+(defun internet-archive-get-request-as-json (id request)
+  "Make a `curl' REQUEST for ID and return the response as a JSON object."
+  (let* ((url (format request id))
+	 (output (shell-command-to-string (format "curl --cookie \"%s\" \"%s\""
+						  internet-archive-cookies-file url))))
     (string-match "{.*}" output)
-    (let* ((json (internet-archive-read-json (match-string 0 output)))
-	   (status (caar json)))
-      (pcase status
-	('success (message "Book borrowed successfully."))
-	('error (user-error (alist-get status json)))))))
+    (internet-archive-read-json (match-string 0 output))))
 
 (defun internet-archive-download-acsm (url)
   "Download ACSM file from Internet Archive URL asynchronously."
