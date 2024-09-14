@@ -1,5 +1,7 @@
 # internet-archive
 
+*Note: As of September 2024, this package is no longer maintained. All books available on the Internet Archive, plus many more, can now be downloaded directly from [Anna’s Archive](https://annas-archive.org/). To integrate this website with Emacs, see the relevant section of my [eww-extras](https://github.com/benthamite/dotfiles/blob/master/emacs/extras/eww-extras.el) package.*
+
 ## Introduction
 
 This simple Emacs package lets you download any PDF file from the [Internet Archive](https://archive.org/) seamlessly, as long as it can be borrowed for at least one hour.
