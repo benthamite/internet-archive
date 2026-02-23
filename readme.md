@@ -1,6 +1,6 @@
 # internet-archive
 
-*Note: As of September 2024, this package is no longer maintained. All books available on the Internet Archive, plus many more, can now be downloaded directly from [Anna’s Archive](https://annas-archive.org/). For rudimentary integrattion with Emacs, see my package [annas-archive](https://github.com/benthamite/annas-archive).*
+*Note: This package is no longer maintained. It is superseded by [annas-archive](https://github.com/benthamite/annas-archive).*
 
 ## Introduction
 
